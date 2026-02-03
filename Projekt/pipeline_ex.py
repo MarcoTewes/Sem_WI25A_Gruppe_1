@@ -22,7 +22,6 @@ class ETL:
     # Save the final table as an Excel file
     def save_final_table(self):
         database_path = self.importer.database_config["database_path"]
-        # your code here #
         with pd.ExcelWriter(f"{database_path}/final_table.xlsx", engine="xlsxwriter", date_format="DD.MM.YYYY", datetime_format="DD.MM.YYYY",) as writer:
             self.final_table.to_excel(writer, index=False)
 
@@ -31,7 +30,6 @@ class ETL:
         self.raw_data_tables["sales_codes"] = self.raw_data_tables["sales_codes"].drop(columns=["Unnamed: 0"]) 
         self.raw_data_tables["vehicle_hash"] = self.raw_data_tables["vehicle_hash"].drop(
             columns=['record_source', 'load_ts', 'Unnamed: 0'])
-        # your code here #
         self.final_table = pd.merge(
             self.raw_data_tables["sales_codes"],
             self.raw_data_tables["vehicle_hash"],
@@ -47,7 +45,6 @@ class ETL:
 
     # Handle invalid production dates in the "sales_codes" table
     def handle_invalid_dates(self):
-        # your code here #
         start = pd.to_datetime("2000-01-01")
         end = pd.to_datetime("2022-12-31")
         df = self.raw_data_tables["sales_codes"]
@@ -57,7 +54,6 @@ class ETL:
 
     # Handle invalid FINs in the "vehicle_hash" table
     def handle_invalid_fins(self, num_of_digits_in_fin=17):
-        # your code here #
         df = self.raw_data_tables["vehicle_hash"].copy()
 
         # Treat FIN as a real string + remove whitespace
@@ -69,7 +65,6 @@ class ETL:
 
     # Handle NaN values in the raw data tables
     def handle_nans(self):
-        # your code here #
         for key in self.raw_data_tables.keys():
             self.raw_data_tables[key] = self.raw_data_tables[key].dropna()
         
@@ -77,3 +72,4 @@ class ETL:
     # Load the data from the imported tables
     def load_data(self):
         self.raw_data_tables = self.importer.load_data()
+
